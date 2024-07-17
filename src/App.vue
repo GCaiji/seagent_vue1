@@ -5,16 +5,20 @@ import Chat from './components/Chat.vue'
 </script>
 
 <template>
-  <header>
+  <!-- <header>
     <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
     </div>
-  </header>
+  </header> -->
 
   <main>
-    <Chat />
+    <div class="wrap">
+      <Chat />
+
+    </div>
+
   </main>
 </template>
 
@@ -22,6 +26,16 @@ import Chat from './components/Chat.vue'
 header {
   line-height: 1.5;
 }
+
+.wrap {
+  position: relative;
+  width: 1280px;
+  height: 600px;
+  border: 1px solid gray;
+  border-radius: 10px;
+}
+
+
 
 .logo {
   display: block;

@@ -1,12 +1,14 @@
 <template>
   <div class="chat-container">
-    <div class="chat-box" v-for="(message, index) in messages" :key="index">
-      <div :class="['message', message.sender]">
-        <span>{{ message.sender }}:</span> <span v-html="message.text"></span> <!-- 使用 v-html 渲染 HTML -->
+    <div class="chat-box" ref="chatBox">
+      <div class="message" v-for="(message, index) in messages" :key="index">
+        <div :class="['message', message.sender]">
+          <span>{{ message.sender }}:</span> <span v-html="message.text"></span> <!-- 使用 v-html 渲染 HTML -->
+        </div>
       </div>
     </div>
     <div class="input-box">
-      <input v-model="userInput" @keyup.enter="sendMessage" placeholder="输入消息..."/>
+      <input v-model="userInput" @keyup.enter="sendMessage" type="text" placeholder="输入消息..." />
       <button @click="sendMessage">发送</button>
     </div>
   </div>
@@ -15,7 +17,6 @@
 <script>
 import axios from 'axios';
 import * as marked from 'marked';
-
 export default {
   data() {
     return {
@@ -36,15 +37,11 @@ export default {
 
     async getResponse(input) {
       try {
-        const requestBody = {
-          user_id: this.userId,
-          message: input,
-          role: this.role
-        };
+        const requestBody = { message: input };
         console.log('Sending request with body:', requestBody);
         const response = await axios.post('http://127.0.0.1:8000/api/chat_with_model', requestBody, {
           headers: {
-            'Content-Type': 'application/json' // 设置请求头部
+            'Content-Type': 'application/json'
           }
         });
 
@@ -54,48 +51,66 @@ export default {
         console.error('HTTP error', error.response ? error.response.status : error);
       }
     },
+
+    scrollChatToBottom() {
+      this.$nextTick(() => {
+        const chatBox = this.$refs.chatBox;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+    },
   },
 };
-
-
 </script>
 
 <style scoped>
 .chat-container {
-  display: flex;
-  flex-direction: column;
-  max-width: 600px;
+  position: relative;
+  width: 900px;
+  height: 600px;
   margin: 0 auto;
   border: 1px solid #ccc;
   padding: 20px;
   border-radius: 10px;
   background-color: #f9f9f9;
+  overflow: hidden;
 }
 
 .chat-box {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
 }
 
 .message {
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  text-align: right;
 }
 
-.message.用户 {
+.message-content {
+  padding: 8px 12px;
+  border-radius: 5px;
+  display: inline-block;
+  max-width: 70%;
+}
+
+.message-用户 {
   align-self: flex-end;
+  word-wrap: break-word;
   background-color: #daf8da;
 }
 
-.message.助手 {
+.message-助手 {
   align-self: flex-start;
+  word-wrap: break-word;
   background-color: #f1f0f0;
 }
 
 .input-box {
   display: flex;
+  margin-top: 10px;
 }
 
 input {
@@ -106,7 +121,7 @@ input {
 }
 
 button {
-  padding: 10px;
+  padding: 10px 20px;
   border: none;
   background-color: #007bff;
   color: white;
