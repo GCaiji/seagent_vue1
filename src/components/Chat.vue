@@ -64,9 +64,11 @@ export default {
 
 <style scoped>
 .chat-container {
-  position: relative;
-  width: 900px;
-  height: 600px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 1150px;
+  height: 100%;
   margin: 0 auto;
   border: 1px solid #ccc;
   padding: 20px;

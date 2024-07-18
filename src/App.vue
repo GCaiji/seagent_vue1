@@ -2,6 +2,8 @@
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
 import Chat from './components/Chat.vue'
+import UserInfo from './components/UserInfo.vue'
+import ChatHistory from './components/ChatHistory.vue'
 </script>
 
 <template>
@@ -15,6 +17,8 @@ import Chat from './components/Chat.vue'
 
   <main>
     <div class="wrap">
+      <UserInfo />
+      <ChatHistory />
       <Chat />
 
     </div>
@@ -29,13 +33,11 @@ header {
 
 .wrap {
   position: relative;
-  width: 1280px;
-  height: 600px;
+  width: 1466px;
+  height: 680px;
   border: 1px solid gray;
   border-radius: 10px;
 }
-
-
 
 .logo {
   display: block;
