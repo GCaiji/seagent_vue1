@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="input-box">
-      <input v-model="userInput" @keyup.enter="sendMessage" type="text" placeholder="输入消息..." />
+      <input v-model="userInput" @keyup.enter="sendMessage" type="text" placeholder="输入消息..."/>
       <button @click="sendMessage">发送</button>
     </div>
   </div>
@@ -17,6 +17,7 @@
 <script>
 import axios from 'axios';
 import * as marked from 'marked';
+
 export default {
   data() {
     return {
@@ -29,7 +30,7 @@ export default {
   methods: {
     async sendMessage() {
       if (this.userInput.trim() !== '') {
-        this.messages.push({ sender: '用户', text: this.userInput });
+        this.messages.push({sender: '用户', text: this.userInput});
         await this.getResponse(this.userInput); // 等待获取回复后再清空输入框
         this.userInput = '';
       }
@@ -37,7 +38,11 @@ export default {
 
     async getResponse(input) {
       try {
-        const requestBody = { message: input };
+        const requestBody = {
+          user_id: this.userId,
+          message: input,
+          role: this.role
+        };
         console.log('Sending request with body:', requestBody);
         const response = await axios.post('http://127.0.0.1:8000/api/chat_with_model', requestBody, {
           headers: {
@@ -46,7 +51,7 @@ export default {
         });
 
         const html = marked.parse(response.data.message); // 使用 marked 将 Markdown 转换为 HTML
-        this.messages.push({ sender: '助手', text: html });
+        this.messages.push({sender: '助手', text: html});
       } catch (error) {
         console.error('HTTP error', error.response ? error.response.status : error);
       }
