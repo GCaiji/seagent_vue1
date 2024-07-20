@@ -72,7 +72,7 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
-  width: 1150px;
+  width: 81%;
   height: 100%;
   margin: 0 auto;
   border: 1px solid #ccc;

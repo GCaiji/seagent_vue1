@@ -20,7 +20,6 @@ import ChatHistory from './components/ChatHistory.vue'
       <UserInfo />
       <ChatHistory />
       <Chat />
-
     </div>
 
   </main>
@@ -32,9 +31,12 @@ header {
 }
 
 .wrap {
-  position: relative;
-  width: 1466px;
-  height: 680px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 95%;
+  height: 95%;
+  margin: 20px 30px auto auto;
   border: 1px solid gray;
   border-radius: 10px;
 }
