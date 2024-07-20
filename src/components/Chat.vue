@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="input-box">
-      <input v-model="userInput" @keyup.enter="sendMessage" type="text" placeholder="输入消息..."/>
+      <input v-model="userInput" @keyup.enter="sendMessage" type="text" placeholder="输入消息..." />
       <button @click="sendMessage">发送</button>
     </div>
   </div>
@@ -30,7 +30,7 @@ export default {
   methods: {
     async sendMessage() {
       if (this.userInput.trim() !== '') {
-        this.messages.push({sender: '用户', text: this.userInput});
+        this.messages.push({ sender: '用户', text: this.userInput });
         await this.getResponse(this.userInput); // 等待获取回复后再清空输入框
         this.userInput = '';
       }
@@ -51,7 +51,7 @@ export default {
         });
 
         const html = marked.parse(response.data.message); // 使用 marked 将 Markdown 转换为 HTML
-        this.messages.push({sender: '助手', text: html});
+        this.messages.push({ sender: '助手', text: html });
       } catch (error) {
         console.error('HTTP error', error.response ? error.response.status : error);
       }
@@ -72,7 +72,7 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
-  width: 1150px;
+  width: 81%;
   height: 100%;
   margin: 0 auto;
   border: 1px solid #ccc;
@@ -92,24 +92,22 @@ export default {
 }
 
 .message {
+  display: flex;
   margin-bottom: 10px;
   text-align: right;
+  justify-content: flex-end;
+
 }
 
-.message-content {
-  padding: 8px 12px;
-  border-radius: 5px;
-  display: inline-block;
-  max-width: 70%;
-}
-
-.message-用户 {
+.message.用户 {
   align-self: flex-end;
   word-wrap: break-word;
   background-color: #daf8da;
+  border: 1px solid #d0f8d0;
+  border-radius: 3px;
 }
 
-.message-助手 {
+.message.助手 {
   align-self: flex-start;
   word-wrap: break-word;
   background-color: #f1f0f0;
