@@ -92,24 +92,22 @@ export default {
 }
 
 .message {
+  display: flex;
   margin-bottom: 10px;
   text-align: right;
+  justify-content: flex-end;
+
 }
 
-.message-content {
-  padding: 8px 12px;
-  border-radius: 5px;
-  display: inline-block;
-  max-width: 70%;
-}
-
-.message-用户 {
+.message.用户 {
   align-self: flex-end;
   word-wrap: break-word;
   background-color: #daf8da;
+  border: 1px solid #d0f8d0;
+  border-radius: 3px;
 }
 
-.message-助手 {
+.message.助手 {
   align-self: flex-start;
   word-wrap: break-word;
   background-color: #f1f0f0;

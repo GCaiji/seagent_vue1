@@ -25,7 +25,7 @@ import ChatHistory from './components/ChatHistory.vue'
   </main>
 </template>
 
-<style scoped>
+<style >
 header {
   line-height: 1.5;
 }
