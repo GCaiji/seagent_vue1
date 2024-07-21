@@ -31,7 +31,7 @@ export default {
     async sendMessage() {
       if (this.userInput.trim() !== '') {
         this.messages.push({ sender: '用户', text: this.userInput });
-        await this.getResponse(this.userInput); // 等待获取回复后再清空输入框
+        //await this.getResponse(this.userInput); // 等待获取回复后再清空输入框 
         this.userInput = '';
       }
     },
@@ -76,8 +76,12 @@ export default {
   height: 100%;
   margin: 0 auto;
   border: 1px solid #ccc;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-bottom: 0px;
+  border-top: 0px;
+  border-right: 0px;
   padding: 20px;
-  border-radius: 10px;
   background-color: #f9f9f9;
   overflow: hidden;
 }
