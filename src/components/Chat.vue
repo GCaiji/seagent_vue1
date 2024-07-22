@@ -30,13 +30,12 @@ export default {
   },
   methods: {
     handleCtrlEnter(event) {
-      if (event.ctrlKey && event.key === 'Enter') {
-        // 按下 Ctrl + Enter，插入换行符
-        this.userInput += '\n';
-      }
+      // 按下 Ctrl + Enter，插入换行符
+      this.userInput += '\n';
+
     },
     async sendMessage() {
-      if (this.userInput.trim() !== '') {
+      if (!event.ctrlKey && this.userInput.trim() !== '') {
         this.messages.push({ sender: '用户', text: this.userInput });
         //await this.getResponse(this.userInput); // 等待获取回复后再清空输入框 
         this.userInput = '';
