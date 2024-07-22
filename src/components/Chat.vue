@@ -8,7 +8,8 @@
       </div>
     </div>
     <div class="input-box">
-      <input v-model="userInput" @keyup.enter="sendMessage" type="text" placeholder="输入消息..." />
+      <textarea v-model="userInput" @keydown.enter.prevent="sendMessage" @keydown.ctrl.enter.prevent="handleCtrlEnter"
+        placeholder="输入消息..." />
       <button @click="sendMessage">发送</button>
     </div>
   </div>
@@ -28,10 +29,15 @@ export default {
     };
   },
   methods: {
+    handleCtrlEnter(event) {
+      // 按下 Ctrl + Enter，插入换行符
+      this.userInput += '\n';
+
+    },
     async sendMessage() {
-      if (this.userInput.trim() !== '') {
+      if (!event.ctrlKey && this.userInput.trim() !== '') {
         this.messages.push({ sender: '用户', text: this.userInput });
-        await this.getResponse(this.userInput); // 等待获取回复后再清空输入框
+        //await this.getResponse(this.userInput); // 等待获取回复后再清空输入框 
         this.userInput = '';
       }
     },
@@ -63,8 +69,10 @@ export default {
         chatBox.scrollTop = chatBox.scrollHeight;
       });
     },
+
   },
 };
+
 </script>
 
 <style scoped>
@@ -76,8 +84,12 @@ export default {
   height: 100%;
   margin: 0 auto;
   border: 1px solid #ccc;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-bottom: 0px;
+  border-top: 0px;
+  border-right: 0px;
   padding: 20px;
-  border-radius: 10px;
   background-color: #f9f9f9;
   overflow: hidden;
 }
@@ -86,7 +98,7 @@ export default {
   height: calc(100% - 60px);
   overflow-y: auto;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: #fff;
   border: 1px solid #ccc;
 }
@@ -96,7 +108,8 @@ export default {
   margin-bottom: 10px;
   text-align: right;
   justify-content: flex-end;
-
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .message.用户 {
@@ -105,6 +118,7 @@ export default {
   background-color: #daf8da;
   border: 1px solid #d0f8d0;
   border-radius: 3px;
+  max-width: 70%;
 }
 
 .message.助手 {
@@ -118,11 +132,17 @@ export default {
   margin-top: 10px;
 }
 
-input {
+textarea {
   flex: 1;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px 0 0 5px;
+  resize: none;
+  overflow-y: scroll;
+}
+
+textarea::-webkit-scrollbar {
+  display: none;
 }
 
 button {
