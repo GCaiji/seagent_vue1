@@ -3,13 +3,14 @@
     <div class="chat-box" ref="chatBox">
       <div class="message" v-for="(message, index) in messages" :key="index">
         <div :class="['message', message.sender]">
-          <span>{{ message.sender }}:</span> <span v-html="message.text"></span> <!-- 使用 v-html 渲染 HTML -->
+          <span class="username">{{ message.sender }}:</span> <span v-html="message.text" class="content"></span>
+          <!-- 使用 v-html 渲染 HTML -->
         </div>
       </div>
     </div>
     <div class="input-box">
       <textarea v-model="userInput" @keydown.enter.prevent="sendMessage" @keydown.ctrl.enter.prevent="handleCtrlEnter"
-        placeholder="输入消息..." />
+        placeholder="输入消息... Enter发送 Ctrl+Enter换行" />
       <button @click="sendMessage">发送</button>
     </div>
   </div>
@@ -110,6 +111,11 @@ export default {
   justify-content: flex-end;
   word-break: break-word;
   overflow-wrap: break-word;
+  text-align: left;
+}
+
+.message span {
+  margin: 5px 8px 5px 8px;
 }
 
 .message.用户 {
@@ -119,6 +125,11 @@ export default {
   border: 1px solid #d0f8d0;
   border-radius: 3px;
   max-width: 70%;
+
+}
+
+.message.用户.username {
+  white-space: nowrap;
 }
 
 .message.助手 {
@@ -130,6 +141,7 @@ export default {
 .input-box {
   display: flex;
   margin-top: 10px;
+  max-height: 60px;
 }
 
 textarea {
@@ -139,6 +151,8 @@ textarea {
   border-radius: 5px 0 0 5px;
   resize: none;
   overflow-y: scroll;
+  font-size: 14px;
+  color: black;
 }
 
 textarea::-webkit-scrollbar {
