@@ -3,7 +3,8 @@
     <div class="chat-box" ref="chatBox">
       <div class="message" v-for="(message, index) in messages" :key="index">
         <div :class="['message', message.sender]">
-          <span class="username">{{ message.sender }}:</span> <span v-html="message.text" class="content"></span>
+          <span class="username">{{ message.sender }}:</span>
+          <span v-html="replaceNewlines(message.text)" class="content"></span>
           <!-- 使用 v-html 渲染 HTML -->
         </div>
       </div>
@@ -30,10 +31,13 @@ export default {
     };
   },
   methods: {
+    replaceNewlines(text) {
+      // 将换行符 \n 替换为 <br> 标签
+      return text.replace(/\n/g, '<br>');
+    },
     handleCtrlEnter(event) {
       // 按下 Ctrl + Enter，插入换行符
       this.userInput += '\n';
-
     },
     async sendMessage() {
       if (!event.ctrlKey && this.userInput.trim() !== '') {
