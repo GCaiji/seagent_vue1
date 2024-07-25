@@ -3,8 +3,8 @@
     <div class="chat-box" ref="chatBox">
       <div class="message" v-for="(message, index) in messages" :key="index">
         <div :class="['message', message.sender]">
-          <span class="username">{{ message.sender }}:</span>
-          <span v-html="replaceNewlines(message.text)" class="content"></span>
+          <span>{{ message.sender }}:</span>
+          <span v-html="replaceNewlines(message.text)"></span>
           <!-- 使用 v-html 渲染 HTML -->
         </div>
       </div>
@@ -29,6 +29,7 @@ export default {
       userId: 1, // 假设用户 ID 是 1，你可以从实际的用户数据中获取
       role: 'user', // 假设用户角色是 'user'，你可以根据实际情况设置
     };
+
   },
   methods: {
     replaceNewlines(text) {
@@ -40,6 +41,7 @@ export default {
       this.userInput += '\n';
     },
     async sendMessage() {
+      //发送消息
       if (!event.ctrlKey && this.userInput.trim() !== '') {
         this.messages.push({ sender: '用户', text: this.userInput });
         //await this.getResponse(this.userInput); // 等待获取回复后再清空输入框 
@@ -85,7 +87,7 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
-  width: 81%;
+  width: 82%;
   height: 100%;
   margin: 0 auto;
   border: 1px solid #ccc;
@@ -126,7 +128,6 @@ export default {
   align-self: flex-end;
   word-wrap: break-word;
   background-color: #daf8da;
-  border: 1px solid #d0f8d0;
   border-radius: 3px;
   max-width: 70%;
 
