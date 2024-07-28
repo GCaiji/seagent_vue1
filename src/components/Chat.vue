@@ -129,8 +129,8 @@ export default {
   word-wrap: break-word;
   background-color: #daf8da;
   border-radius: 3px;
-  max-width: 70%;
-
+  max-width: 80%;
+  margin-right: 5px;
 }
 
 .message.用户.username {
@@ -141,6 +141,7 @@ export default {
   align-self: flex-start;
   word-wrap: break-word;
   background-color: #f1f0f0;
+  max-width: 80%;
 }
 
 .input-box {
