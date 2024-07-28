@@ -55,7 +55,7 @@ export default {
 .newchat button {
   width: 90%;
   height: 70%;
-  border: 1px solid #ccc;
+  border: 1px dashed #ccc;
   background-color: white;
   border-radius: 7px;
   cursor: pointer;
@@ -68,10 +68,26 @@ export default {
 .chatlist {
   display: flex;
   flex-direction: column;
-
   align-items: center;
   height: calc(100% - 66px);
   overflow-y: auto;
+}
+
+.chatlist::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatlist::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.chatlist::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+.chatlist::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
 }
 
 .chat-item {
@@ -81,5 +97,14 @@ export default {
 
 .chat-item button {
   width: 100%;
+  height: 50px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.chat-item button:hover {
+  background-color: #f1f1f1
 }
 </style>
