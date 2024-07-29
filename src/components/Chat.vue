@@ -22,6 +22,7 @@ import axios from 'axios';
 import * as marked from 'marked';
 
 export default {
+  props: ['chatId'],
   data() {
     return {
       messages: [],
@@ -30,6 +31,19 @@ export default {
       role: 'user', // 假设用户角色是 'user'，你可以根据实际情况设置
     };
 
+  },
+  watch: {
+    chatId(newVal) {
+      // 切换到新的聊天框时，保存旧聊天框的消息并更新标题
+      this.saveChatMessages();
+      this.loadChatMessages(newVal);
+    }
+  },
+  mounted() {
+    // 加载初始的聊天框消息
+    if (this.chatId !== null) {
+      this.loadChatMessages(this.chatId);
+    }
   },
   methods: {
     replaceNewlines(text) {
@@ -75,6 +89,17 @@ export default {
         const chatBox = this.$refs.chatBox;
         chatBox.scrollTop = chatBox.scrollHeight;
       });
+    },
+    loadChatMessages(chatId) {
+      // 模拟加载聊天框消息，可以从后端获取或者本地存储加载
+      this.chatTitle = `Chat ${chatId}`;
+      const savedMessages = JSON.parse(localStorage.getItem(`chat_${chatId}`));
+      this.messages = savedMessages || [];
+      this.scrollToBottom();
+    },
+    saveChatMessages() {
+      // 保存当前聊天框消息到本地存储或者后端
+      localStorage.setItem(`chat_${this.chatId}`, JSON.stringify(this.messages));
     },
 
   },
@@ -129,8 +154,8 @@ export default {
   word-wrap: break-word;
   background-color: #daf8da;
   border-radius: 3px;
-  max-width: 70%;
-
+  max-width: 80%;
+  margin-right: 5px;
 }
 
 .message.用户.username {
@@ -141,6 +166,7 @@ export default {
   align-self: flex-start;
   word-wrap: break-word;
   background-color: #f1f0f0;
+  max-width: 80%;
 }
 
 .input-box {

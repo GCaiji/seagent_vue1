@@ -3,15 +3,54 @@
     <div class="newchat">
       <button @click="newChat">New Chat</button>
     </div>
+    <div class="chatlist">
+      <div class="chat-item" v-for="(chat, index) in chats" :key="index" @click="selectChat(chat.id)"
+        :class="{ active: chat.id === selectedChatId }">
+        <button>{{ chat.title }}</button>
+      </div>
+    </div>
+  </div>
+  <div class="chat-container">
+    <keep-alive>
+      <Chat v-if="selectedChatId !== null" :key="selectedChatId" :chat-id="selectedChatId" />
+    </keep-alive>
   </div>
 </template>
 
 <script>
+import Chat from './Chat.vue';
 export default {
+  components: {
+    Chat
+  },
+  data() {
+    return {
+      chats: [],
+      nextChatId: 1,
+      selectedChatId: null
+    };
+  },
+  created() {
+    // 创建默认的初始对话框和选项
+    this.newChat();
+  },
   methods: {
+    newChat() {
+      const newChatId = this.nextChatId++;
+      const newChatTitle = `Chat ${newChatId}`;
+      // 在数组中添加一个新的对话选项对象
+      this.chats.push({
+        title: `New Chat_${this.chats.length + 1}`, // 给对话选项一个标题
+        id: newChatId,
 
+      });
+      this.selectChat(newChatId);
+    },
+    selectChat(chatId) {
+      this.selectedChatId = chatId;
+    }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -38,7 +77,7 @@ export default {
 .newchat button {
   width: 90%;
   height: 70%;
-  border: 1px solid #ccc;
+  border: 1px dashed #ccc;
   background-color: white;
   border-radius: 7px;
   cursor: pointer;
@@ -46,5 +85,57 @@ export default {
 
 .newchat button:hover {
   background-color: #f1f1f1
+}
+
+.chatlist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(100% - 66px);
+  overflow-y: auto;
+}
+
+.chatlist::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatlist::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.chatlist::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+.chatlist::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.chat-item {
+  margin-bottom: 10px;
+  width: 90%;
+}
+
+.chat-item button {
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.chat-item button:hover {
+  background-color: #f1f1f1
+}
+
+.chat-item.active button {
+  background-color: #007bff;
+  color: white;
+}
+
+.chat-item.active button:hover {
+  background-color: #007bff;
 }
 </style>
