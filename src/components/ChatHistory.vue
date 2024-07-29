@@ -4,28 +4,50 @@
       <button @click="newChat">New Chat</button>
     </div>
     <div class="chatlist">
-      <div v-for="(chat, index) in chats" :key="index" class="chat-item">
+      <div class="chat-item" v-for="(chat, index) in chats" :key="index" @click="selectChat(chat.id)"
+        :class="{ active: chat.id === selectedChatId }">
         <button>{{ chat.title }}</button>
       </div>
     </div>
   </div>
+  <div class="chat-container">
+    <keep-alive>
+      <Chat v-if="selectedChatId !== null" :key="selectedChatId" :chat-id="selectedChatId" />
+    </keep-alive>
+  </div>
 </template>
 
 <script>
+import Chat from './Chat.vue';
 export default {
+  components: {
+    Chat
+  },
   data() {
     return {
-      chats: [
-        { title: 'New Chat_1' } // 初始的对话选项
-      ]
+      chats: [],
+      nextChatId: 1,
+      selectedChatId: null
     };
+  },
+  created() {
+    // 创建默认的初始对话框和选项
+    this.newChat();
   },
   methods: {
     newChat() {
+      const newChatId = this.nextChatId++;
+      const newChatTitle = `Chat ${newChatId}`;
       // 在数组中添加一个新的对话选项对象
       this.chats.push({
-        title: `New Chat_${this.chats.length + 1}`  // 给对话选项一个标题
+        title: `New Chat_${this.chats.length + 1}`, // 给对话选项一个标题
+        id: newChatId,
+
       });
+      this.selectChat(newChatId);
+    },
+    selectChat(chatId) {
+      this.selectedChatId = chatId;
     }
   }
 };
@@ -106,5 +128,14 @@ export default {
 
 .chat-item button:hover {
   background-color: #f1f1f1
+}
+
+.chat-item.active button {
+  background-color: #007bff;
+  color: white;
+}
+
+.chat-item.active button:hover {
+  background-color: #007bff;
 }
 </style>
