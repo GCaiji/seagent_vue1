@@ -4,7 +4,7 @@
       <button @click="newChat">New Chat</button>
     </div>
     <div class="chatlist">
-      <div class="chat-item" v-for="(chat, index) in chats" :key="index" @click="selectChat(chat.id)"
+      <div class="chat-item" v-for="(chat, index) in chats.slice().reverse()" :key="index" @click="selectChat(chat.id)"
         :class="{ active: chat.id === selectedChatId }">
         <button>{{ chat.title }}</button>
       </div>
@@ -97,6 +97,7 @@ export default {
 
 .chatlist::-webkit-scrollbar {
   width: 6px;
+
 }
 
 .chatlist::-webkit-scrollbar-track {
@@ -131,11 +132,11 @@ export default {
 }
 
 .chat-item.active button {
-  background-color: #007bff;
-  color: white;
+  border-color: rgb(75 158 95);
+  color: rgb(75 158 95);
 }
 
 .chat-item.active button:hover {
-  background-color: #007bff;
+  background-color: white;
 }
 </style>
