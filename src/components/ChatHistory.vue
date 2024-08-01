@@ -6,7 +6,9 @@
     <div class="chatlist">
       <div class="chat-item" v-for="(chat, index) in chats.slice().reverse()" :key="index" @click="selectChat(chat.id)"
         :class="{ active: chat.id === selectedChatId }">
-        <button>{{ chat.title }}</button>
+        <button><span>{{ chat.title }}</span>
+          <div class="deleteicon"></div>
+        </button>
       </div>
     </div>
   </div>
@@ -114,11 +116,14 @@ export default {
 }
 
 .chat-item {
+  position: relative;
   margin-bottom: 10px;
   width: 90%;
 }
 
 .chat-item button {
+  position: relative;
+  display: flex;
   width: 100%;
   height: 50px;
   cursor: pointer;
@@ -131,6 +136,15 @@ export default {
   background-color: #f1f1f1
 }
 
+.chat-item button span {
+  position: absolute;
+  left: 25%;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  font-size: 16px;
+}
+
 .chat-item.active button {
   border-color: rgb(75 158 95);
   color: rgb(75 158 95);
@@ -138,5 +152,20 @@ export default {
 
 .chat-item.active button:hover {
   background-color: white;
+}
+
+.deleteicon {
+  position: absolute;
+  right: 16%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  background-image: url(../images/delete.png);
+  background-size: contain;
+}
+
+.deleteicon:hover {
+  background-image: url(../images/delete_hover.png);
 }
 </style>
