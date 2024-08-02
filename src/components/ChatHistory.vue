@@ -7,7 +7,7 @@
       <div class="chat-item" v-for="(chat, index) in chats.slice().reverse()" :key="index" @click="selectChat(chat.id)"
         :class="{ active: chat.id === selectedChatId }">
         <button><span>{{ chat.title }}</span>
-          <div class="deleteicon"></div>
+          <div class="deleteicon" @click.stop="deleteChat(chat.id)"></div>
         </button>
       </div>
     </div>
@@ -50,7 +50,30 @@ export default {
     },
     selectChat(chatId) {
       this.selectedChatId = chatId;
+    },
+    deleteChat(chatId) {
+      // 根据 chatId 删除对应的聊天选项
+      const index = this.chats.findIndex(chat => chat.id === chatId);
+      if (index !== -1) {
+        // 如果只剩一个聊天选项，弹出提示框并返回
+        if (this.chats.length === 1) {
+          alert("无法删除所有聊天框");
+          return;
+        }
+
+        this.chats.splice(index, 1);
+
+        if (this.selectedChatId === chatId) {
+          // 如果删除的是当前选中的聊天，将选中聊天切换为上一个聊天（如果有的话）
+          if (index > 0) {
+            this.selectChat(this.chats[index - 1].id);
+          } else {
+            this.selectChat(this.chats[0].id);
+          }
+        }
+      }
     }
+
   }
 };
 </script>
