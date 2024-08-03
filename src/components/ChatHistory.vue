@@ -6,7 +6,16 @@
     <div class="chatlist">
       <div class="chat-item" v-for="(chat, index) in chats.slice().reverse()" :key="index" @click="selectChat(chat.id)"
         :class="{ active: chat.id === selectedChatId }">
-        <button><span>{{ chat.title }}</span>
+        <button>
+          <div class="editicon" @click.stop="editchatitem"></div>
+          <div class="itemtitle">
+            <template v-if="chat.editing">
+              <input type="text" v-model="chat.title" @blur="saveChatItem(chat.id)" @keyup.enter="saveChatItem(chat.id)">
+            </template>
+            <template v-else>
+              {{ chat.title }}
+            </template>
+          </div>
           <div class="deleteicon" @click.stop="deleteChat(chat.id)"></div>
         </button>
       </div>
@@ -42,7 +51,7 @@ export default {
       const newChatTitle = `Chat ${newChatId}`;
       // 在数组中添加一个新的对话选项对象
       this.chats.push({
-        title: `New Chat_${this.chats.length + 1}`, // 给对话选项一个标题
+        title: `New Chat`, // 给对话选项一个标题
         id: newChatId,
 
       });
@@ -72,7 +81,7 @@ export default {
           }
         }
       }
-    }
+    },
 
   }
 };
@@ -106,6 +115,7 @@ export default {
   background-color: white;
   border-radius: 7px;
   cursor: pointer;
+  min-width: 120px;
 }
 
 .newchat button:hover {
@@ -153,13 +163,14 @@ export default {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 5px;
+  min-width: 120px;
 }
 
 .chat-item button:hover {
   background-color: #f1f1f1
 }
 
-.chat-item button span {
+.chat-item button .itemtitle {
   position: absolute;
   left: 25%;
   top: 50%;
@@ -182,13 +193,28 @@ export default {
   right: 16%;
   top: 50%;
   transform: translateY(-50%);
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background-image: url(../images/delete.png);
   background-size: contain;
 }
 
 .deleteicon:hover {
   background-image: url(../images/delete_hover.png);
+}
+
+.editicon {
+  position: absolute;
+  right: 28%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-image: url(../images/edit.png);
+  background-size: contain;
+}
+
+.editicon:hover {
+  background-image: url(../images/edit_hover.png);
 }
 </style>
