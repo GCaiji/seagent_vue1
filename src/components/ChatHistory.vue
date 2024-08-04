@@ -7,10 +7,11 @@
       <div class="chat-item" v-for="(chat, index) in chats.slice().reverse()" :key="index" @click="selectChat(chat.id)"
         :class="{ active: chat.id === selectedChatId }">
         <button>
-          <div class="editicon" @click.stop="editchatitem"></div>
+          <div class="editicon" :class="{ 'editicon-editing': chat.editing, 'editicon-default': !chat.editing }"
+            @click="toggleEdit(chat)"></div>
           <div class="itemtitle">
             <template v-if="chat.editing">
-              <input type="text" v-model="chat.title" @blur="saveChatItem(chat.id)" @keyup.enter="saveChatItem(chat.id)">
+              <input type="text" v-model="editedTitle" @keyup.enter="saveEdit(chat)" @blur="saveEdit(chat)">
             </template>
             <template v-else>
               {{ chat.title }}
@@ -82,6 +83,22 @@ export default {
         }
       }
     },
+    toggleEdit(chat) {
+      if (chat.editing) {
+        // 如果已经在编辑状态，直接保存修改
+        this.saveEdit(chat);
+      } else {
+        // 否则进入编辑状态，并将 editedTitle 设置为当前 chat 的 title
+        chat.editing = true;
+        this.editedTitle = chat.title;
+        this.placeholder = "1";
+      }
+    },
+    saveEdit(chat) {
+      // 保存编辑后的内容
+      chat.title = this.editedTitle;
+      chat.editing = false; // 退出编辑状态
+    }
 
   }
 };
@@ -115,7 +132,7 @@ export default {
   background-color: white;
   border-radius: 7px;
   cursor: pointer;
-  min-width: 120px;
+  min-width: 220px;
 }
 
 .newchat button:hover {
@@ -163,7 +180,7 @@ export default {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 5px;
-  min-width: 120px;
+  min-width: 220px;
 }
 
 .chat-item button:hover {
@@ -172,11 +189,19 @@ export default {
 
 .chat-item button .itemtitle {
   position: absolute;
-  left: 25%;
+  left: 10%;
   top: 50%;
+  width: 40%;
   transform: translateY(-50%);
   height: 20px;
-  font-size: 16px;
+  font-size: 18px;
+}
+
+.itemtitle input {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  min-width: 88px;
 }
 
 .chat-item.active button {
@@ -216,5 +241,13 @@ export default {
 
 .editicon:hover {
   background-image: url(../images/edit_hover.png);
+}
+
+.editicon-editing {
+  background-image: url(../images/save.png);
+}
+
+.editicon-editing:hover {
+  background-image: url(../images/save_hover.png);
 }
 </style>
