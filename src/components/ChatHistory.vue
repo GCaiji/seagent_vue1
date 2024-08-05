@@ -7,8 +7,10 @@
       <div class="chat-item" v-for="(chat, index) in chats.slice().reverse()" :key="index" @click="selectChat(chat.id)"
         :class="{ active: chat.id === selectedChatId }">
         <button>
-          <div class="editicon" :class="{ 'editicon-editing': chat.editing, 'editicon-default': !chat.editing }"
-            @click="toggleEdit(chat)"></div>
+          <div>
+            <div v-if="!chat.editing" class="editicon" @click="toggleEdit(chat)"></div>
+            <div v-else class="editicon-save" @click="saveEdit(chat)"></div>
+          </div>
           <div class="itemtitle">
             <template v-if="chat.editing">
               <input type="text" v-model="editedTitle" @keyup.enter="saveEdit(chat)" @blur="saveEdit(chat)">
@@ -84,14 +86,11 @@ export default {
       }
     },
     toggleEdit(chat) {
+      // 切换编辑状态
+      chat.editing = !chat.editing;
+      // 如果进入编辑状态，则设置编辑框的默认值为原标题
       if (chat.editing) {
-        // 如果已经在编辑状态，直接保存修改
-        this.saveEdit(chat);
-      } else {
-        // 否则进入编辑状态，并将 editedTitle 设置为当前 chat 的 title
-        chat.editing = true;
         this.editedTitle = chat.title;
-        this.placeholder = "1";
       }
     },
     saveEdit(chat) {
@@ -202,6 +201,7 @@ export default {
   left: 0;
   width: 100%;
   min-width: 88px;
+  height: 18px;
 }
 
 .chat-item.active button {
@@ -243,11 +243,18 @@ export default {
   background-image: url(../images/edit_hover.png);
 }
 
-.editicon-editing {
+.editicon-save {
+  position: absolute;
+  right: 28%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
   background-image: url(../images/save.png);
+  background-size: contain;
 }
 
-.editicon-editing:hover {
+.editicon-save:hover {
   background-image: url(../images/save_hover.png);
 }
 </style>
