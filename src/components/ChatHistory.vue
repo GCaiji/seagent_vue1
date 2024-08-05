@@ -6,7 +6,21 @@
     <div class="chatlist">
       <div class="chat-item" v-for="(chat, index) in chats.slice().reverse()" :key="index" @click="selectChat(chat.id)"
         :class="{ active: chat.id === selectedChatId }">
-        <button>{{ chat.title }}</button>
+        <button>
+          <div>
+            <div v-if="!chat.editing" class="editicon" @click="toggleEdit(chat)"></div>
+            <div v-else class="editicon-save" @click="saveEdit(chat)"></div>
+          </div>
+          <div class="itemtitle">
+            <template v-if="chat.editing">
+              <input type="text" v-model="editedTitle" @keyup.enter="saveEdit(chat)" @blur="saveEdit(chat)">
+            </template>
+            <template v-else>
+              {{ chat.title }}
+            </template>
+          </div>
+          <div class="deleteicon" @click.stop="deleteChat(chat.id)"></div>
+        </button>
       </div>
     </div>
   </div>
@@ -40,7 +54,7 @@ export default {
       const newChatTitle = `Chat ${newChatId}`;
       // 在数组中添加一个新的对话选项对象
       this.chats.push({
-        title: `New Chat_${this.chats.length + 1}`, // 给对话选项一个标题
+        title: `New Chat`, // 给对话选项一个标题
         id: newChatId,
 
       });
@@ -48,7 +62,43 @@ export default {
     },
     selectChat(chatId) {
       this.selectedChatId = chatId;
+    },
+    deleteChat(chatId) {
+      // 根据 chatId 删除对应的聊天选项
+      const index = this.chats.findIndex(chat => chat.id === chatId);
+      if (index !== -1) {
+        // 如果只剩一个聊天选项，弹出提示框并返回
+        if (this.chats.length === 1) {
+          alert("无法删除所有聊天框");
+          return;
+        }
+
+        this.chats.splice(index, 1);
+
+        if (this.selectedChatId === chatId) {
+          // 如果删除的是当前选中的聊天，将选中聊天切换为上一个聊天（如果有的话）
+          if (index > 0) {
+            this.selectChat(this.chats[index - 1].id);
+          } else {
+            this.selectChat(this.chats[0].id);
+          }
+        }
+      }
+    },
+    toggleEdit(chat) {
+      // 切换编辑状态
+      chat.editing = !chat.editing;
+      // 如果进入编辑状态，则设置编辑框的默认值为原标题
+      if (chat.editing) {
+        this.editedTitle = chat.title;
+      }
+    },
+    saveEdit(chat) {
+      // 保存编辑后的内容
+      chat.title = this.editedTitle;
+      chat.editing = false; // 退出编辑状态
     }
+
   }
 };
 </script>
@@ -81,6 +131,7 @@ export default {
   background-color: white;
   border-radius: 7px;
   cursor: pointer;
+  min-width: 220px;
 }
 
 .newchat button:hover {
@@ -114,21 +165,43 @@ export default {
 }
 
 .chat-item {
+  position: relative;
   margin-bottom: 10px;
   width: 90%;
 }
 
 .chat-item button {
+  position: relative;
+  display: flex;
   width: 100%;
   height: 50px;
   cursor: pointer;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 5px;
+  min-width: 220px;
 }
 
 .chat-item button:hover {
   background-color: #f1f1f1
+}
+
+.chat-item button .itemtitle {
+  position: absolute;
+  left: 10%;
+  top: 50%;
+  width: 40%;
+  transform: translateY(-50%);
+  height: 20px;
+  font-size: 18px;
+}
+
+.itemtitle input {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  min-width: 88px;
+  height: 18px;
 }
 
 .chat-item.active button {
@@ -138,5 +211,50 @@ export default {
 
 .chat-item.active button:hover {
   background-color: white;
+}
+
+.deleteicon {
+  position: absolute;
+  right: 16%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-image: url(../images/delete.png);
+  background-size: contain;
+}
+
+.deleteicon:hover {
+  background-image: url(../images/delete_hover.png);
+}
+
+.editicon {
+  position: absolute;
+  right: 28%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-image: url(../images/edit.png);
+  background-size: contain;
+}
+
+.editicon:hover {
+  background-image: url(../images/edit_hover.png);
+}
+
+.editicon-save {
+  position: absolute;
+  right: 28%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-image: url(../images/save.png);
+  background-size: contain;
+}
+
+.editicon-save:hover {
+  background-image: url(../images/save_hover.png);
 }
 </style>
