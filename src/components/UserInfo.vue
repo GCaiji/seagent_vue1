@@ -50,7 +50,7 @@ export default {
   height: 14%;
   z-index: 100;
   background-color: #fff;
-  border: 1px solid #ccc;
+  border: 0px solid #ccc;
   border-radius: 5px;
   padding: 5px 10px;
 }
