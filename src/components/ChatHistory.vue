@@ -220,12 +220,12 @@ export default {
   transform: translateY(-50%);
   width: 20px;
   height: 20px;
-  background-image: url(../images/delete.png);
+  background-image: url(../images/icon/delete.png);
   background-size: contain;
 }
 
 .deleteicon:hover {
-  background-image: url(../images/delete_hover.png);
+  background-image: url(../images/icon/delete_hover.png);
 }
 
 .editicon {
@@ -235,12 +235,12 @@ export default {
   transform: translateY(-50%);
   width: 20px;
   height: 20px;
-  background-image: url(../images/edit.png);
+  background-image: url(../images/icon/edit.png);
   background-size: contain;
 }
 
 .editicon:hover {
-  background-image: url(../images/edit_hover.png);
+  background-image: url(../images/icon/edit_hover.png);
 }
 
 .editicon-save {
@@ -250,11 +250,11 @@ export default {
   transform: translateY(-50%);
   width: 20px;
   height: 20px;
-  background-image: url(../images/save.png);
+  background-image: url(../images/icon/save.png);
   background-size: contain;
 }
 
 .editicon-save:hover {
-  background-image: url(../images/save_hover.png);
+  background-image: url(../images/icon/save_hover.png);
 }
 </style>
