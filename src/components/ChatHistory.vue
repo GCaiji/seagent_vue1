@@ -13,7 +13,8 @@
           </div>
           <div class="itemtitle">
             <template v-if="chat.editing">
-              <input type="text" v-model="editedTitle" @keyup.enter="saveEdit(chat)" @blur="saveEdit(chat)">
+              <input type="text" v-model="editedTitle" :placeholder="originalTitle" @keyup.enter="saveEdit(chat)"
+                @blur="saveEdit(chat)">
             </template>
             <template v-else>
               {{ chat.title }}
@@ -41,7 +42,8 @@ export default {
     return {
       chats: [],
       nextChatId: 1,
-      selectedChatId: null
+      selectedChatId: null,
+      originalTitle: "",
     };
   },
   created() {
@@ -88,6 +90,7 @@ export default {
     toggleEdit(chat) {
       // 切换编辑状态
       chat.editing = !chat.editing;
+      this.originalTitle = chat.title;
       // 如果进入编辑状态，则设置编辑框的默认值为原标题
       if (chat.editing) {
         this.editedTitle = chat.title;
@@ -96,6 +99,7 @@ export default {
     saveEdit(chat) {
       // 保存编辑后的内容
       chat.title = this.editedTitle;
+      this.originalTitle = this.editedTitle;
       chat.editing = false; // 退出编辑状态
     }
 
@@ -180,6 +184,9 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   min-width: 220px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .chat-item button:hover {
