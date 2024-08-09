@@ -11,7 +11,7 @@
     </div>
     <div class="input-box">
       <textarea v-model="userInput" @keydown.enter.prevent="sendMessage" @keydown.ctrl.enter.prevent="handleCtrlEnter"
-        placeholder="输入消息... Enter发送 Ctrl+Enter换行" />
+                placeholder="输入消息... Enter发送 Ctrl+Enter换行"/>
       <button @click="sendMessage">发送</button>
     </div>
   </div>
@@ -27,7 +27,7 @@ export default {
     return {
       messages: [],
       userInput: '',
-      userId: 1, // 假设用户 ID 是 1，你可以从实际的用户数据中获取
+      userId: 666, // 假设用户 ID 是 1，你可以从实际的用户数据中获取
       role: 'user', // 假设用户角色是 'user'，你可以根据实际情况设置
     };
 
@@ -50,20 +50,22 @@ export default {
       // 将换行符 \n 替换为 <br> 标签
       return text.replace(/\n/g, '<br>');
     },
+
     handleCtrlEnter(event) {
       // 按下 Ctrl + Enter，插入换行符
       this.userInput += '\n';
     },
+
     async sendMessage() {
       //发送消息
       if (!event.ctrlKey && this.userInput.trim() !== '') {
-        this.messages.push({ sender: '用户', text: this.userInput });
-        //await this.getResponse(this.userInput); // 等待获取回复后再清空输入框 
+        this.messages.push({sender: '用户', text: this.userInput});
+        await this.llmInvoke(this.userInput); // 等待获取回复后再清空输入框
         this.userInput = '';
       }
     },
 
-    async getResponse(input) {
+    async llmInvoke(input) {
       try {
         const requestBody = {
           user_id: this.userId,
@@ -71,14 +73,31 @@ export default {
           role: this.role
         };
         console.log('Sending request with body:', requestBody);
-        const response = await axios.post('http://127.0.0.1:8000/api/chat_with_model', requestBody, {
+        const response = await axios.post('http://127.0.0.1:8000/api/chat_with_agent', requestBody, {
           headers: {
             'Content-Type': 'application/json'
           }
         });
 
         const html = marked.parse(response.data.message); // 使用 marked 将 Markdown 转换为 HTML
-        this.messages.push({ sender: '助手', text: html });
+        this.messages.push({sender: '助手', text: html});
+      } catch (error) {
+        console.error('HTTP error', error.response ? error.response.status : error);
+      }
+    },
+
+    async getMessages() {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/messages/${this.userId}`);
+        this.messages = response.data;
+      } catch (error) {
+        console.error('HTTP error', error.response ? error.response.status : error);
+      }
+    },
+
+    async deleteMessage() {
+      try {
+        await axios.delete(`http://127.0.0.1:8000/messages/${this.userId}`);
       } catch (error) {
         console.error('HTTP error', error.response ? error.response.status : error);
       }
@@ -90,6 +109,7 @@ export default {
         chatBox.scrollTop = chatBox.scrollHeight;
       });
     },
+
     loadChatMessages(chatId) {
       // 模拟加载聊天框消息，可以从后端获取或者本地存储加载
       this.chatTitle = `Chat ${chatId}`;
@@ -97,6 +117,7 @@ export default {
       this.messages = savedMessages || [];
       this.scrollToBottom();
     },
+
     saveChatMessages() {
       // 保存当前聊天框消息到本地存储或者后端
       localStorage.setItem(`chat_${this.chatId}`, JSON.stringify(this.messages));

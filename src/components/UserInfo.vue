@@ -28,7 +28,7 @@ export default {
         // 假设的用户信息
         name: '张三',
         role: '用户',
-        avatar: "C:\\Users\\yu200\\Desktop\\0013d3a015424e273cdef1d95263076.jpg", // 这里可以是默认头像的路径
+        avatar: "https://raw.githubusercontent.com/nullskymc/blogs/master/images/avatar.jpg?token=GHSAT0AAAAAACPOUJUBUC7DCAN6ROK4T3LOZVUS7HA", // 这里可以是默认头像的路径
       },
       userId: 1, // 保持这个字段，即使它不被使用
       role: 'user', // 保持这个字段，即使它不被使用
@@ -58,5 +58,11 @@ export default {
 .user-info {
   display: flex;
   align-items: center;
+}
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 </style>
